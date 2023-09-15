@@ -1,0 +1,8 @@
+{
+    "name": "turierik/intro",
+    "type": "project",
+    "require": {
+        "alrik11es/cowsayphp": "^1.2",
+        "fakerphp/faker": "^1.23"
+    }
+}
