@@ -36,7 +36,9 @@ class DatabaseSeeder extends Seeder
 
         for ($i = 1; $i <= 5; $i++){
             $tag = Tag::factory() -> create();
-            // TODO: N-N kapcsolat
+            $tag -> posts() -> sync(
+                ($posts -> random( rand(1, $posts -> count()))) -> pluck('id')
+            );
         }
     }
 }
