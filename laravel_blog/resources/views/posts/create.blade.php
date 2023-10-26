@@ -20,6 +20,10 @@
             <option value="{{ $u -> id }}">{{ $u -> name }}</option>
         @endforeach
     </select><br>
+    Címkék:<br>
+    @foreach ($tags as $t)
+        <input type="checkbox" name="tags[]" value="{{ $t -> id }}">{{ $t -> name }}<br>
+    @endforeach
     <button type="submit">Küldés</button>
 </form>
 

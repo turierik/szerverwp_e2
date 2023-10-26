@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class PostController extends Controller
 {
@@ -26,7 +28,8 @@ class PostController extends Controller
     public function create()
     {
         return view('posts.create', [
-            'users' => User::all()
+            'users' => User::all(),
+            'tags' => Tag::all()
         ]);
     }
 
@@ -38,14 +41,21 @@ class PostController extends Controller
         $validated = $request -> validate( [
             'title' => 'required|string|min:3',
             'content' => 'required|string|min:20',
-            'user_id' => 'required|integer|exists:users,id'
+            'user_id' => 'required|integer|exists:users,id',
+            'tags[]' => 'array',
+            'tags.*' => 'distinct|integer|exists:tags,id'
         ], [
             'title.required' => 'A cím megadása kötelező!',
             'title.min' => 'A cím min 3 karakter!'
         ]);
 
         // mi történjen, ha minden jó :)
-        return "akármit";
+
+        $post = Post::create($validated);
+        $post -> tags() -> sync($validated['tags'] ?? []);
+
+        Session::flash('post-created', true);
+        return redirect() -> route('posts.index');
     }
 
     /**
@@ -61,7 +71,11 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return view('posts.edit', [
+            'users' => User::all(),
+            'tags' => Tag::all(),
+            'post' => $post
+        ]);
     }
 
     /**
@@ -69,7 +83,24 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $validated = $request -> validate( [
+            'title' => 'required|string|min:3',
+            'content' => 'required|string|min:20',
+            'user_id' => 'required|integer|exists:users,id',
+            'tags[]' => 'array',
+            'tags.*' => 'distinct|integer|exists:tags,id'
+        ], [
+            'title.required' => 'A cím megadása kötelező!',
+            'title.min' => 'A cím min 3 karakter!'
+        ]);
+
+        // mi történjen, ha minden jó :)
+
+        $post -> update($validated);
+        $post -> tags() -> sync($validated['tags'] ?? []);
+
+        Session::flash('post-updated', true);
+        return redirect() -> route('posts.index');
     }
 
     /**
