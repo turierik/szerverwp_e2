@@ -16,19 +16,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect() -> route('posts.index');
 });
 
 Route::get('/demo', function () {
     return view('demo.sample');
 });
 
-Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
-Route::get('/posts/create', [PostController::class, 'create']);
-Route::get('/posts/{post}/edit', [PostController::class, 'edit']);
-Route::get('/posts/{post}', [PostController::class, 'show']);
-Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
-Route::patch('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
+Route::resource('/posts', PostController::class);
 
 Route::get('/dashboard', function () {
     return view('dashboard');

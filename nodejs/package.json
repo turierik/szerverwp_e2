@@ -1,0 +1,17 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "db": "rimraf database.sqlite && npx sequelize db:migrate && npx sequelize db:seed:all"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@faker-js/faker": "^8.3.1",
+    "sequelize": "^6.35.1",
+    "sequelize-cli": "^6.6.2",
+    "sqlite3": "^5.1.6"
+  }
+}
