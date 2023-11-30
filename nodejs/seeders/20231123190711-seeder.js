@@ -13,14 +13,24 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-   const users = []
+   let users = []
    for (let i = 0; i < 10; i++){
     users.push({
       email: faker.internet.email(),
       password: faker.internet.password()
     })
    }
-   await User.bulkCreate(users)
+   users = await User.bulkCreate(users)
+
+   const posts = []
+   for (let i = 0; i < 30; i++){
+    posts.push({
+      title: faker.lorem.sentence(),
+      content: faker.lorem.text(),
+      authorId: faker.helpers.arrayElement(users).id
+    })
+   }
+   await Post.bulkCreate(posts)
   },
 
   async down (queryInterface, Sequelize) {
